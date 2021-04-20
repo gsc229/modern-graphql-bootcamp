@@ -1,1 +1,3 @@
-import {} from '@babel/cli'
+export const myFunction = () => {
+  console.log("You ran my function")
+}
