@@ -1,0 +1,23 @@
+{
+  "name": "the-modern-graphql-bootcamp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gsc229/modern-graphql-bootcamp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gsc229/modern-graphql-bootcamp/issues"
+  },
+  "homepage": "https://github.com/gsc229/modern-graphql-bootcamp#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.13.16",
+    "@babel/core": "^7.13.16"
+  }
+}
