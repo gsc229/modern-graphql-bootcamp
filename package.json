@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "babel-node src/index.js",
+    "start": "babel-node graphql-basics/src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,6 +23,7 @@
     "@babel/preset-env": "^7.13.15"
   },
   "dependencies": {
-    "@babel/node": "^7.13.13"
+    "@babel/node": "^7.13.13",
+    "graphql-yoga": "^1.18.3"
   }
 }
