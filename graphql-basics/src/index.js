@@ -7,7 +7,9 @@ import { GraphQLServer } from 'graphql-yoga'
 const typeDefs = `
   type Query {
     add(a: Float!, b: Float!): String
+    addArray(numbers: [Float!]!): Float!
     greeting(name: String, position: String): String
+    grades: [Int!]!
     me: User!
     post: Post!
   }
@@ -32,8 +34,14 @@ const typeDefs = `
 const resolvers = {
   Query: {
     add(parent, args, ctx, info) {
-      console.log({args})
-      return `The answer is: ${args.a + args.b}`
+      console.log({parent, args, ctx, info})
+      return `${args.a} + ${args.b} = ${args.a + args.b}`
+    },
+    addArray(parent, args, ctx, info){
+      return args.numbers.reduce((accum, curr) => {return accum + curr}, 0)
+    },
+    grades(parent, args, ctx, info){
+      return [99, 80, 93]
     },
     greeting(parent, args, ctx, info){
       if(args.name) return `Hello! My name is ${args.name} and I am a ${args.position}`
