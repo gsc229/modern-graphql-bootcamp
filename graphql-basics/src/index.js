@@ -10,6 +10,7 @@ const typeDefs = `
     addArray(numbers: [Float!]!): Float!
     greeting(name: String, position: String): String
     grades: [Int!]!
+    users: [User!]!
     me: User!
     post: Post!
   }
@@ -29,6 +30,25 @@ const typeDefs = `
   }
 `
 
+// Demo User Data:
+const users = [
+  {
+    id: '1',
+    name: 'Greg',
+    email: 'greg@mail.com'
+  },
+  {
+    id: '2',
+    name: 'Bob',
+    email: 'bob@mail.com'
+  },
+  {
+    id: '3',
+    name: 'Jenny',
+    email: 'jenny@mail.com'
+  }
+]
+
 
 // Resolvers:
 const resolvers = {
@@ -46,6 +66,9 @@ const resolvers = {
     greeting(parent, args, ctx, info){
       if(args.name) return `Hello! My name is ${args.name} and I am a ${args.position}`
       return 'Hi there. Wish I knew your name!'
+    },
+    users(parent, args, ctx, infor){
+      return users
     },
     me() {
       return {
