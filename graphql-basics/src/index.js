@@ -11,6 +11,7 @@ const typeDefs = `
     greeting(name: String, position: String): String
     grades: [Int!]!
     users: [User!]!
+    posts(query: String): [Post!]!
     me: User!
     post: Post!
   }
@@ -49,6 +50,28 @@ const users = [
   }
 ]
 
+// Demo Posts Data:
+const posts = [
+  {
+    id: '1',
+    title: 'This is post one',
+    body: 'Posting this for the first time.',
+    published: true
+  },
+  {
+    id: '2', 
+    title: 'Post 2',
+    body: 'I like pizza',
+    published: false
+  },
+  {
+    id: '3',
+    title: 'Post 3',
+    body: 'I like hot dogs',
+    published: true
+  }
+]
+
 
 // Resolvers:
 const resolvers = {
@@ -67,8 +90,15 @@ const resolvers = {
       if(args.name) return `Hello! My name is ${args.name} and I am a ${args.position}`
       return 'Hi there. Wish I knew your name!'
     },
-    users(parent, args, ctx, infor){
+    users(parent, args, ctx, info){
       return users
+    },
+    posts(parent, args, ctx, info){
+      console.log({args})
+      if(args.query){
+        return posts.filter(post => post.title.includes(args.query) || post.body.includes(args.query))
+      }
+      return posts
     },
     me() {
       return {
