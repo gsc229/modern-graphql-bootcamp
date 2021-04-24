@@ -63,15 +63,13 @@ export const resolvers = {
   Mutation: {
     createUser(parent, args, ctx, info){
       console.log({args})
-      const emailTaken = users.some(user => user.email === args.email)
+      const emailTaken = users.some(user => user.email === args.data.email)
 
       if(emailTaken) throw new Error('Email taken')
 
       const newUser = {
         id: uuidV4(),
-        name: args.name,
-        email: args.email,
-        age: args.age
+        ...args.data
       }
 
       users.push(newUser)
@@ -80,13 +78,13 @@ export const resolvers = {
     }, 
     createPost(parent, args, ctx, info){
 
-      const userExists = users.some(user => user.id === args.author)
+      const userExists = users.some(user => user.id === args.data.author)
       
       if(!userExists) throw new Error("Invalid user id")
       
       const post = {
         id: uuidV4(),
-        ...args
+        ...args.data
       }
 
       posts.push(post)
@@ -94,8 +92,8 @@ export const resolvers = {
       return post
     },
     createComment(parent, args, ctx, info){
-      const userExists = users.some(user => user.id === args.author)
-      const postExists = posts.find(post => post.id === args.post)
+      const userExists = users.some(user => user.id === args.data.author)
+      const postExists = posts.find(post => post.id === args.data.post)
 
       if(!userExists) throw new Error("Invalid user id")
       if(!postExists) throw new Error("Invalid post id")
@@ -103,7 +101,7 @@ export const resolvers = {
 
       const comment = {
         id: uuidV4(),
-        ...args
+        ...args.data
       }
 
       comments.push(comment)
