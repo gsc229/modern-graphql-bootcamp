@@ -1,5 +1,72 @@
 import { v4 as uuidV4 } from 'uuid'
-import { users, posts, comments } from './data'
+
+export let users = [
+  {
+    id: '1',
+    name: 'Greg',
+    email: 'greg@mail.com',
+    age: 37
+  },
+  {
+    id: '2',
+    name: 'Bob',
+    email: 'bob@mail.com',
+    age: 54
+  },
+  {
+    id: '3',
+    name: 'Jenny',
+    email: 'jenny@mail.com',
+    age: 31
+  }
+]
+
+// Demo Posts Data:
+export let posts = [
+  {
+    id: '1',
+    title: 'This is post one',
+    body: 'Posting this for the first time.',
+    published: true,
+    author: '1'
+  },
+  {
+    id: '2', 
+    title: 'Post 2',
+    body: 'I like pizza',
+    published: true,
+    author: '2'
+  },
+  {
+    id: '3',
+    title: 'Post 3',
+    body: 'I like hot dogs',
+    published: true,
+    author: '3'
+  }
+]
+
+export let comments = [
+  {
+    id: '1',
+    text: "This is a comment by Greg on Bob's post",
+    author: '1',
+    post: '2'
+  }, 
+  {
+    id: '2',
+    text: "This is a comment by Bob on Jenny's post",
+    author: '2',
+    post: '3'
+  },
+  {
+    id: '3', 
+    text: "This is a comment b Jenny on Greg's post.",
+    author: '3',
+    post: '1'
+  }
+
+]
 
 // Resolvers:
 export const resolvers = {
@@ -76,6 +143,16 @@ export const resolvers = {
       return newUser
 
     }, 
+    deleteUser(parent, args, ctx, info){
+      const userIndex = users.findIndex(user => user.id === args.id)
+      if (userIndex === -1) throw new Error("User with that id does not exist.")
+
+      const deletedUser = users.splice(userIndex, 1)[0]
+      posts = posts.filter(post => post.author !== deletedUser.id)
+      comments = comments.filter(comment => comment.author !== deletedUser.id)
+      
+      return deletedUser
+    },
     createPost(parent, args, ctx, info){
 
       const userExists = users.some(user => user.id === args.data.author)

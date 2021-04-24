@@ -1,5 +1,5 @@
 // Demo User Data:
-export const users = [
+export let users = [
   {
     id: '1',
     name: 'Greg',
@@ -21,7 +21,7 @@ export const users = [
 ]
 
 // Demo Posts Data:
-export const posts = [
+export let posts = [
   {
     id: '1',
     title: 'This is post one',
@@ -45,7 +45,7 @@ export const posts = [
   }
 ]
 
-export const comments = [
+export let comments = [
   {
     id: '1',
     text: "This is a comment by Greg on Bob's post",
