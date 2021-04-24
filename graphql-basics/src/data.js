@@ -3,17 +3,20 @@ export const users = [
   {
     id: '1',
     name: 'Greg',
-    email: 'greg@mail.com'
+    email: 'greg@mail.com',
+    age: 37
   },
   {
     id: '2',
     name: 'Bob',
-    email: 'bob@mail.com'
+    email: 'bob@mail.com',
+    age: 54
   },
   {
     id: '3',
     name: 'Jenny',
-    email: 'jenny@mail.com'
+    email: 'jenny@mail.com',
+    age: 31
   }
 ]
 
@@ -30,7 +33,7 @@ export const posts = [
     id: '2', 
     title: 'Post 2',
     body: 'I like pizza',
-    published: false,
+    published: true,
     author: '2'
   },
   {
