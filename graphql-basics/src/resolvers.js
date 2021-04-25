@@ -150,7 +150,7 @@ export const resolvers = {
       const deletedUser = users.splice(userIndex, 1)[0]
       posts = posts.filter(post => post.author !== deletedUser.id)
       comments = comments.filter(comment => comment.author !== deletedUser.id)
-      
+
       return deletedUser
     },
     createPost(parent, args, ctx, info){
@@ -168,6 +168,17 @@ export const resolvers = {
 
       return post
     },
+    deletePost(parent, args, ctx, info){
+      const postIndex = posts.findIndex(post => post.id === args.id)
+
+      if(postIndex === -1) throw new Error("Couldn't find a post with that id")
+
+      const deletedPost = posts.splice(postIndex, 1)[0]
+
+      comments = comments.filter(comment => comment.post !== deletedPost.id)
+      console.log({comments, deletedPost, id: args.id})
+      return deletedPost
+    },
     createComment(parent, args, ctx, info){
       const userExists = users.some(user => user.id === args.data.author)
       const postExists = posts.find(post => post.id === args.data.post)
@@ -183,6 +194,18 @@ export const resolvers = {
 
       comments.push(comment)
       return comment
+    },
+    deleteComment(parent, args, ctx, info){
+      const commentIndex = comments.findIndex(comment => comment.id === args.id)
+
+      if(commentIndex === -1) throw new Error("Couln't find a comment with that id")
+
+      const deletedComment = comments.splice(commentIndex, 1)[0]
+
+      console.log({deletedComment})
+      console.log({comments})
+      return deletedComment
+
     }
   },
   Post: {
