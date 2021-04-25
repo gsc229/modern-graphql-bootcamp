@@ -3,16 +3,11 @@ import { typeDefs } from './typeDefs'
 import { resolvers } from './resolvers'
 
 
-
 const server = new GraphQLServer({
-  typeDefs: typeDefs,
+  typeDefs: 'graphql-basics/src/schema.graphql',
   resolvers: resolvers
 })
 
 server.start(()=> {
   console.log('The server is up!')
 })
-
-
-
-
