@@ -80,6 +80,7 @@ const Mutation = {
     const deletedPost = db.posts.splice(postIndex, 1)[0]
 
     db.comments = db.comments.filter(comment => comment.post !== deletedPost.id)
+    
     return deletedPost
   },
   createComment(parent, args, {db}, info){
@@ -96,6 +97,15 @@ const Mutation = {
     }
 
     db.comments.push(comment)
+    return comment
+  },
+  updateComment(parent, {id, data}, {db}, info){
+    const comment = db.comments.find(comment => comment.id === id)
+
+    if(!comment) throw new Error("No comment found with that id")
+
+    if(typeof data.text === "string") comment.text = data.text
+
     return comment
   },
   deleteComment(parent, args, {db}, info){
