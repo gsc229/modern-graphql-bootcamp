@@ -40,7 +40,7 @@ const posts = [
     id: '3',
     title: 'Post 3',
     body: 'I like hot dogs',
-    published: true,
+    published: false,
     author: '3'
   }
 ]

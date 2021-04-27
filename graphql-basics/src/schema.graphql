@@ -28,6 +28,11 @@ type Subscription {
   post: PostSubscriptionPayload!
 }
 
+type PostSubscriptionPayload {
+  mutation: String!
+  data: Post!
+}
+
 input CreateUserInput {
   name: String!, 
   email: String!, 
@@ -88,7 +93,4 @@ type Comment {
   post: Post!
 }
 
-type PostSubscriptionPayload {
-  mutation: String!
-  data: Post!
-}
+
