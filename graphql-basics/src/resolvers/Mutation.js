@@ -64,8 +64,9 @@ const Mutation = {
 
     return post
   },
-  updatePost(parent, {id, data}, {db}, info){
+  updatePost(parent, {id, data}, {db, pubsub}, info){
     const post = db.posts.find(post => post.id === id)
+    const originalPost = { ...post }
 
     if(!post) throw new Error("No post found with that id")
 
@@ -73,7 +74,32 @@ const Mutation = {
 
     if(typeof data.title === "string") post.title = data.title
 
-    if(typeof data.published === "boolean") post.published = data.published
+    if(typeof data.published === "boolean"){
+      post.published = data.published
+
+      if(originalPost.published && !post.published) {
+        pubsub.publish('post', {
+          post: {
+            mutation: 'DELETED',
+            data: originalPost
+          }
+        })
+      } else if(!originalPost.published && post.published) {
+        pubsub.publish('post', {
+          post: {
+            mutation: 'CREATED',
+            data: post
+          }
+        })
+      } else if(post.published) {
+        pubsub.publish('post', {
+          post: {
+            mutation: 'UPDATED',
+            data: post
+          }
+        })
+      }
+    }
 
     return post
 
@@ -110,25 +136,44 @@ const Mutation = {
     }
 
     db.comments.push(comment)
-    pubsub.publish(`comment ${ args.data.post }`, { comment })
+    pubsub.publish(`comment ${ args.data.post }`, { 
+      comment: {
+        mutation: 'CREATED',
+        data: comment
+      }
+     })
 
     return comment
   },
-  updateComment(parent, {id, data}, {db}, info){
+  updateComment(parent, { id, data }, {db, pubsub}, info){
     const comment = db.comments.find(comment => comment.id === id)
 
     if(!comment) throw new Error("No comment found with that id")
 
     if(typeof data.text === "string") comment.text = data.text
 
+    pubsub.publish(`comment ${ comment.post }`, {
+      comment: {
+        mutation: 'UPDATED',
+        data: comment
+      }
+    })
+
     return comment
   },
-  deleteComment(parent, args, {db}, info){
-    const commentIndex = comments.findIndex(comment => comment.id === args.id)
+  deleteComment(parent, args, { db, pubsub }, info){
+    const commentIndex = db.comments.findIndex(comment => comment.id === args.id)
 
     if(commentIndex === -1) throw new Error("Couln't find a comment with that id")
 
-    const deletedComment = comments.splice(commentIndex, 1)[0]
+    const deletedComment = db.comments.splice(commentIndex, 1)[0]
+
+    pubsub.publish(`comment ${ deletedComment.post }`, {
+      comment: {
+        mutation: 'DELETED',
+        data: deletedComment
+      }
+    })
 
     return deletedComment
 
