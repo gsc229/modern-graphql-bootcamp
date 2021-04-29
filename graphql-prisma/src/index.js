@@ -6,6 +6,7 @@ import Comment from './resolvers/Comment'
 import Query from './resolvers/Query'
 import Mutation from './resolvers/Mutation'
 import Subscription from './resolvers/Subscription'
+import './prisma'
 
 const resolvers = {
   User,
@@ -20,7 +21,7 @@ const pubsub = new PubSub()
 
 // This configuration is for graphql-yoga
 const server = new GraphQLServer({
-  typeDefs: 'graphql-basics/src/schema.graphql',
+  typeDefs: 'src/schema.graphql',
   resolvers,
   context: {
     db,
