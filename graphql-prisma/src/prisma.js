@@ -9,52 +9,61 @@ const prisma = new Prisma({
 
 // prisma.query prisma.mutation prisma.subscription prisma.exists
 
-/* prisma.query.users(null, '{ id name email posts { id title body }}')
-.then(data => {
-  console.log(JSON.stringify({ data }, null, 2))
-}) */
+//1. Create a new post
+//2. Fetch all of the info abou the user
+const createPostForUser = async (authorId, data) => {
 
-
-/* prisma.query.comments(null, '{ id text author { id name } }')
-.then( commentsData => {
-  console.log(JSON.stringify({commentsData}, null, 2))
-})
- */
-
-/* prisma.mutation.createPost({
-  data: {
-    title: "This is a graphQL POST by Nancy",
-    body: "My name is Nancy and this is my first POST",
-    published: true,
-    author: {
-      connect: {
-        id: "cko8wgxg3000h0942tyzbr4rq"
+  const post = await prisma.mutation.createPost({
+    data: {
+      ...data,
+      author: {
+        connect: {
+          id: authorId
+        }
       }
     }
-  }
-}, "{ id title body published }")
-.then(newPost => {
-  console.log(JSON.stringify({newPost}, null, 2))
-  return prisma.query.users(null, '{ id name email posts { id title body }}')
-})
-.then(data => {
-  console.log(JSON.stringify({ data }, null, 2))
-}) */
+  }, '{ id }')
 
-prisma.mutation.updatePost({
-  data: {
-    title: "This is a SECOND graphQL POST by Nancy",
-    body: "This is acutally Nancy's second POST.",
-    published: true
-  },
-  where: {
-    id: "cko90vu0700db0942vnlms8jh"
-  }
-}, "{ id title body published }")
-.then(updatedPost => {
-  console.log(JSON.stringify({updatedPost}, null, 2))
-  return prisma.query.posts(null, '{ id title body }')
+  
+
+  const user = await prisma.query.users({
+    where: {
+      id: authorId
+    }
+  }, '{ id name email posts { id title published } }')
+
+  return user
+
+}
+
+const updatePostForUser = async (postId, data) => {
+
+  const updatedPost = await prisma.mutation.updatePost({
+    where: {
+      id: postId
+    },
+    data
+  }, '{ id author { id } }')
+
+  if(!updatedPost) return new Error("Something went wrong updating post.")
+
+  const user = await prisma.query.users({
+    where: {
+      id: updatedPost.author.id
+    }
+  }, '{ id name email posts { id title body published } }')
+
+  return user
+}
+
+updatePostForUser( "cko91wj2t00f209424tu72cfr" ,{
+  title: "Nancy likes pizza",
+  body: "In my last post I said hot dogs. I change my mind. It's pizza.",
+  published: false
 })
-.then(data => {
-  console.log(JSON.stringify({ data }, null, 2))
+.then(updatedInfo => {
+  console.log(JSON.stringify({updatedInfo}, null, 2))
+})
+.catch(error => {
+  console.log({error})
 })
