@@ -21,7 +21,7 @@ const pubsub = new PubSub()
 
 // This configuration is for graphql-yoga
 const server = new GraphQLServer({
-  typeDefs: 'src/schema.graphql',
+  typeDefs: 'graphql-prisma/src/schema.graphql',
   resolvers,
   context: {
     db,
