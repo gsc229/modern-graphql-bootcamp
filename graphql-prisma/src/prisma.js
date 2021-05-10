@@ -7,10 +7,12 @@ const prisma = new Prisma({
   endpoint: 'http://localhost:4466'
 })
 
+export default prisma
+
 // prisma.query prisma.mutation prisma.subscription prisma.exists
 
 
-const createPostForUser = async (authorId, data) => {
+/* const createPostForUser = async (authorId, data) => {
 
   const userExists = await prisma.exists.User({
     id: authorId
@@ -48,7 +50,7 @@ const updatePostForUser = async (postId, data) => {
   }, '{ id author { id name email posts { id title body published } } }')
 
   return updatedPost.author
-}
+} */
 
 
 /* createPostForUser("cko8wgxg3000h0942tyzbr4rq", {

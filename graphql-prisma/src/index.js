@@ -6,7 +6,7 @@ import Comment from './resolvers/Comment'
 import Query from './resolvers/Query'
 import Mutation from './resolvers/Mutation'
 import Subscription from './resolvers/Subscription'
-import './prisma'
+import prisma from './prisma'
 
 const resolvers = {
   User,
@@ -25,7 +25,8 @@ const server = new GraphQLServer({
   resolvers,
   context: {
     db,
-    pubsub
+    pubsub,
+    prisma
   }
 })
 
