@@ -1,46 +1,37 @@
 import { v4 as uuidV4 } from 'uuid'
 
 const Mutation = {
-  createUser(parent, args, {db}, info){
-    const emailTaken = db.users.some(user => user.email === args.data.email)
+  async createUser(parent, args, { prisma }, info){
+
+    const emailTaken = await prisma.exists.User({ email: args.data.email })
 
     if(emailTaken) throw new Error('Email taken')
 
-    const newUser = {
-      id: uuidV4(),
-      ...args.data
-    }
+    const newUser = await prisma.mutation.createUser({ data: args.data })
 
-    db.users.push(newUser)
     return newUser
 
   }, 
-  deleteUser(parent, args, {db}, info){
-    const userIndex = db.users.findIndex(user => user.id === args.id)
-    if (userIndex === -1) throw new Error("User with that id does not exist.")
+  async deleteUser(parent, args, { prisma }, info){
 
-    const deletedUser = db.users.splice(userIndex, 1)[0]
-    db.posts = db.posts.filter(post => post.author !== deletedUser.id)
-    comments = comments.filter(comment => comment.author !== deletedUser.id)
+    const userExists = await prisma.exists.User({ id: args.id })
+
+    if(!userExists) throw new Error("No user found with that id")
+
+    const deletedUser = await prisma.mutation.deleteUser({ where: { id: args.id } }, info)
 
     return deletedUser
   },
-  updateUser(parent, {id, data}, {db}, info){
-    const user = db.users.find(user => user.id === id)
+  async updateUser(parent, args, { prisma }, info){
 
-    if(!user) throw new Error("User not found")
+    const updatedUser = await prisma.mutation.updateUser({
+      where: {
+        id: args.id
+      },
+      data: args.data
+    }, info)
 
-    if(typeof data.email === "string") {
-      const emailTaken = db.users.some(user => user.email === data.email)
-      if(emailTaken) throw new Error("That email is being used by another user")
-      user.email = data.email
-    }
-
-    if(typeof data.name === "string") user.name = data.name
-
-    if(typeof data.age !== undefined) user.age = data.age
-
-    return user
+    return updatedUser
 
   },
   createPost(parent, args, { db, pubsub }, info){
