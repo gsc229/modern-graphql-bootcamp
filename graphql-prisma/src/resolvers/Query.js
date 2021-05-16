@@ -28,8 +28,8 @@ const Query = {
     }
     return db.posts */
   },
-  comments(parent, args, {db}, info){
-    return db.comments.filter(comment => comment.text.includes(args.query))
+  comments(parent, args, { db , prisma}, info){
+    return prisma.comments(null, info)
   },
   me() {
     return {
