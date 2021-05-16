@@ -1,6 +1,6 @@
 const Query = {
 
-  users(parent, args, { db, prisma }, info){
+  users(parent, args, { prisma }, info){
     const opArgs = {}
 
     if(args.query){
@@ -15,7 +15,7 @@ const Query = {
     return prisma.query.users(opArgs, info)
   },
 
-  posts(parent, args, { db, prisma }, info){
+  posts(parent, args, { prisma }, info){
 
     const opArgs = {}
 
@@ -31,7 +31,7 @@ const Query = {
     return prisma.query.posts(opArgs, info)
   },
 
-  comments(parent, args, { db , prisma}, info){
+  comments(parent, args, { prisma }, info){
 
     const opArgs = {}
 
@@ -40,7 +40,6 @@ const Query = {
         text_contains: args.query
       }
     }
-
 
     return prisma.query.comments(opArgs, info)
   },
